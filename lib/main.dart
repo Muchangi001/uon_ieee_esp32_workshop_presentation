@@ -1190,7 +1190,21 @@ led.toggle();    // Switch state''',
             Text(
               'ESP32 Workshop - 2:30 PM to 5:00 PM',
               style: TextStyle(fontSize: 20, color: Colors.white70),
-            )
+            ),
+            SizedBox(height: 40),
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFE38C2D), Color(0xFFBC8C61)],
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'Instructor: ANDREW MUCHANGI',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
