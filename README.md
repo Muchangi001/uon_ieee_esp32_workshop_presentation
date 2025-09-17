@@ -39,8 +39,8 @@ A beautiful, responsive Flutter presentation for an ESP32 Rust workshop, featuri
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd embedded-systems-presentation
+git clone uon_ieee_esp32_workshop_presentation
+cd uon_ieee_esp32_workshop_presentation
 ```
 
 2. Install dependencies:
