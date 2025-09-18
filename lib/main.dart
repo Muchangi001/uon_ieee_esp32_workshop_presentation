@@ -819,8 +819,7 @@ led.toggle();    // Switch state''',
             ),
           ],
         ),
-      ),
-    );
+      ));
   }
 
   Widget _buildSetupLoopSlide() {
@@ -939,7 +938,7 @@ led.toggle();    // Switch state''',
                                     style: TextStyle(fontSize: 14, fontFamily: 'FiraCode', color: Colors.green.shade300),
                                   ),
                                   Text(
-                                    '    // Main program\n    led.set_high();\n    delay.delay_ms(1000u32);\n    led.set_low();\n    delay.delay_ms(1000u32);\n  }\n}',
+                                    '    // Main program\n    led.set_high();\n    delay.delay_ms(1000u32);\n    led.set_low();\n    delay.delay.ms(1000u32);\n  }\n}',
                                     style: TextStyle(fontSize: 12, fontFamily: 'FiraCode', color: Colors.white),
                                   ),
                                 ],
@@ -1600,13 +1599,14 @@ led.toggle();    // Switch state''',
                                 ),
                                 SizedBox(height: 15),
                                 // 8-bit register visualization
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                Wrap(
+                                  alignment: WrapAlignment.spaceEvenly,
                                   children: List.generate(8, (index) {
                                     bool isActive = index == 2 || index == 5; // GPIO2 and GPIO5 active
                                     return Container(
                                       width: 40,
                                       height: 40,
+                                      margin: EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: isActive ? Colors.green.shade300 : Color(0xFF2D2E32),
                                         border: Border.all(color: Colors.white),
@@ -2720,58 +2720,117 @@ cargo espflash flash --monitor''',
       backgroundColor: Color(0xFF1E1F23),
       body: Column(
         children: [
-          // Header with navigation
+          // Responsive Header with navigation
           Container(
-            height: 80,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             color: Color(0xFF2D2E32),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    'ESP32 Rust Workshop - IEEE UoN',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: currentSlide > 0 ? () {
-                        _pageController.previousPage(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      } : null,
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFBC8C61).withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(20),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth > 600) {
+                  // Desktop/Tablet layout
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'ESP32 Rust Workshop - IEEE UoN',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      child: Text(
-                        '${currentSlide + 1} / $totalSlides',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: currentSlide > 0 ? () {
+                              _pageController.previousPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            } : null,
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFBC8C61).withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              '${currentSlide + 1} / $totalSlides',
+                              style: TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: currentSlide < totalSlides - 1 ? () {
+                              _pageController.nextPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            } : null,
+                            icon: Icon(Icons.arrow_forward, color: Colors.white),
+                          ),
+                        ],
                       ),
-                    ),
-                    IconButton(
-                      onPressed: currentSlide < totalSlides - 1 ? () {
-                        _pageController.nextPage(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      } : null,
-                      icon: Icon(Icons.arrow_forward, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  );
+                } else {
+                  // Mobile layout
+                  return Column(
+                    children: [
+                      Text(
+                        'ESP32 Rust Workshop',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            onPressed: currentSlide > 0 ? () {
+                              _pageController.previousPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            } : null,
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                            iconSize: 24,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFBC8C61).withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              '${currentSlide + 1} / $totalSlides',
+                              style: TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: currentSlide < totalSlides - 1 ? () {
+                              _pageController.nextPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            } : null,
+                            icon: Icon(Icons.arrow_forward, color: Colors.white),
+                            iconSize: 24,
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
           ),
           
@@ -2818,6 +2877,40 @@ cargo espflash flash --monitor''',
           ),
         ],
       ),
+      // Add bottom navigation for mobile
+      bottomNavigationBar: MediaQuery.of(context).size.width < 600
+          ? Container(
+              height: 60,
+              color: Color(0xFF2D2E32),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: currentSlide > 0 ? () {
+                      _pageController.previousPage(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    } : null,
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                  ),
+                  Text(
+                    'Slide ${currentSlide + 1} of $totalSlides',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: currentSlide < totalSlides - 1 ? () {
+                      _pageController.nextPage(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    } : null,
+                    icon: Icon(Icons.arrow_forward, color: Colors.white),
+                  ),
+                ],
+              ),
+            )
+          : null,
     );
   }
 }
